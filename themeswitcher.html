@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Switcher with Animations</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --background-color: #f5f5f5;
+            --card-background: #fff;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            transition: color var(--transition-speed);
+        }
+
+        .theme-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .theme-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-btn:active {
+            transform: translateY(-1px);
+        }
+
+        #lightTheme {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        #darkTheme {
+            background-color: #333;
+            color: #f5f5f5;
+        }
+
+        #colorfulTheme {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #a1c4fd);
+            background-size: 300% 300%;
+            color: #333;
+            animation: gradientAnimation 4s ease infinite;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            transition: color var(--transition-speed);
+        }
+
+        .card button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .card button:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .theme-animation {
+            animation: themeChange 0.5s ease-in-out;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateX(200%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @keyframes themeChange {
+            0% { opacity: 0.7; transform: scale(0.98); }
+            50% { opacity: 0.9; transform: scale(1.01); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Dark theme */
+        body.dark-theme {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --text-color: #f5f5f5;
+            --background-color: #222;
+            --card-background: #333;
+        }
+
+        /* Colorful theme */
+        body.colorful-theme {
+            --primary-color: #e74c3c;
+            --secondary-color: #f1c40f;
+            --text-color: #34495e;
+            --background-color: #ecf0f1;
+            --card-background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Theme Switcher with Animations</h1>
+        
+        <div class="theme-controls">
+            <button id="lightTheme" class="theme-btn">Light Theme</button>
+            <button id="darkTheme" class="theme-btn">Dark Theme</button>
+            <button id="colorfulTheme" class="theme-btn">Colorful Theme</button>
+        </div>
+        
+        <div class="card">
+            <h2>CSS Animations</h2>
+            <p>This card has hover animations and transitions. Move your cursor over it to see the effects.</p>
+            <button id="animateBtn">Trigger Animation</button>
+        </div>
+        
+        <div class="card">
+            <h2>Local Storage Preferences</h2>
+            <p>Your theme preferences are automatically saved in the browser's localStorage.</p>
+            <p>Close the browser and come back later - your theme preference will still be applied!</p>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Theme preference saved successfully!
+    </div>
+
+    <script>
+        // DOM Elements
+        const lightThemeBtn = document.getElementById('lightTheme');
+        const darkThemeBtn = document.getElementById('darkTheme');
+        const colorfulThemeBtn = document.getElementById('colorfulTheme');
+        const animateBtn = document.getElementById('animateBtn');
+        const notification = document.getElementById('notification');
+        const cards = document.querySelectorAll('.card');
+        
+        // Theme switching function
+        function setTheme(themeName) {
+            // Remove all theme classes
+            document.body.classList.remove('dark-theme', 'colorful-theme');
+            
+            // Add animation class
+            document.body.classList.add('theme-animation');
+            
+            // Add new theme class if not default
+            if (themeName !== 'light-theme') {
+                document.body.classList.add(themeName);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('theme', themeName);
+            
+            // Show notification
+            showNotification(`${themeName.split('-')[0].charAt(0).toUpperCase() + themeName.split('-')[0].slice(1)} theme applied and saved!`);
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                document.body.classList.remove('theme-animation');
+            }, 500);
+        }
+        
+        // Notification function
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Event listeners for theme buttons
+        lightThemeBtn.addEventListener('click', () => setTheme('light-theme'));
+        darkThemeBtn.addEventListener('click', () => setTheme('dark-theme'));
+        colorfulThemeBtn.addEventListener('click', () => setTheme('colorful-theme'));
+        
+        // Event listener for animation button
+        animateBtn.addEventListener('click', function() {
+            // Apply animation to all cards
+            cards.forEach(card => {
+                card.style.animation = 'none';
+                setTimeout(() => {
+                    card.style.animation = 'themeChange 0.5s ease-in-out';
+                }, 10);
+            });
+        });
+        
+        // Load saved theme from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light-theme';
+            setTheme(savedTheme);
+        });
+    </script>
+</body>
+</html>
